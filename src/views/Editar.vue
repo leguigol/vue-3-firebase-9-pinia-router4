@@ -1,0 +1,31 @@
+<template>
+    <div>
+        <h1>EDITAR ID: route.params</h1>
+        <form @submit.prevent="handleSubmit">
+            <input type="text" placeholder="Ingrese URL" v-model="url">
+            <button type="submit">EDITAR</button>
+        </form>
+    </div>
+</template>
+
+<script setup>
+import { onMounted } from 'vue';
+import {useRoute} from 'vue-router';
+import {useDatabaseStore} from '../stores/database';
+import { ref } from 'vue';
+
+const route=useRoute();
+const databaseStore=useDatabaseStore();
+
+const handleSubmit= () => { 
+    console.log('editar');
+    databaseStore.updateUrl(route.params.id,url.value)
+}
+
+const url=ref('')
+
+onMounted(async() => {
+    url.value=await databaseStore.leerUrl(route.params.id)
+})
+</script>
+
