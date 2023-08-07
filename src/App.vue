@@ -5,7 +5,7 @@ const useStore=useUserStore();
 </script>
 <template>
   <h1>App Base</h1>
-
+  <a-button type="primary">Primary button</a-button>
   <nav v-if="!useStore.loadingSession">
     <ul>
       <router-link to="/" v-if="useStore.userData">Home | </router-link>
