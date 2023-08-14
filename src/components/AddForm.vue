@@ -4,7 +4,7 @@ import { useDatabaseStore } from '../stores/database';
 import { message } from 'ant-design-vue';
 
 const formState=reactive({
-    url: ''
+    url: "",
 })
 
 const databaseStore=useDatabaseStore();
@@ -46,20 +46,16 @@ const onFinish= async(value)=>{
             :rules="[
                 {
                     required: true,
-                    whitespace: true,
-                    pattern: /^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/,
+                    // whitespace: true,
+                    pattern: /^http?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
                     message: 'ingrese una url valida',
-                }
+                },
             ]"
         >
-            <a-input v-model="formState.url"></a-input>
+            <a-input v-model:value="formState.url"></a-input>
         </a-form-item>
         <a-form-item>
-            <a-button
-                type="primary"
-                html-type="submit"
-            >Ingresar
-            </a-button>
+            <a-button type="primary" html-type="submit">Ingresar</a-button>
         </a-form-item>
     </a-form>
 </template>

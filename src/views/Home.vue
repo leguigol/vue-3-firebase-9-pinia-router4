@@ -1,8 +1,8 @@
 <script setup>
 import {useUserStore} from '../stores/user';
 import { useDatabaseStore } from '../stores/database';
-import { ref} from 'vue';
 import { useRouter } from 'vue-router';
+import { message } from 'ant-design-vue';
 
 const useStore=useUserStore();
 const databaseStore=useDatabaseStore();
@@ -11,13 +11,20 @@ const router=useRouter();
 
 databaseStore.getUrls();
 
-const url = ref('')
-
-const handleSubmit=()=> {
-    // validar la url
-    console.log('formulario');
-    databaseStore.addUrl(url.value);
+const confirm = async(id) => {
+    const error=await databaseStore.deleteUrl(id);
+    if(!error) return message.success('Se elimino con exito')
+    return message.error(error);
 }
+const cancel = () => {
+    message.error('No se elimino')
+}
+
+// const handleSubmit=()=> {
+//     // validar la url
+//     console.log('formulario');
+//     databaseStore.addUrl(url.value);
+// }
 </script>
 <template>
     <div>
@@ -30,7 +37,34 @@ const handleSubmit=()=> {
             <button type="submit">Agregar</button>
         </form> -->
         <p v-if="databaseStore.loadingDoc">loading docs...</p>
-        <ul>
+
+        <a-space direction="vertical" v-if="!databaseStore.loadingDoc" style="width: 100%">
+
+            <a-card
+                v-for="item of databaseStore.documents" 
+                :key="item.id"
+                :title="item.short"
+                
+            >
+                <template #extra>
+                    <a-space>
+                        <a-popconfirm
+                            title="Estas seguro de borrar ?"
+                            ok-text="Si"
+                            cancel-text="No"
+                            @confirm="confirm(item.id)"
+                            @cancel="cancel"
+                        >
+                        <a-button danger @click="databaseStore.deleteUrl(item.id)">Eliminar</a-button>
+                    </a-popconfirm>    
+                        <a-button type="primary"  @click="router.push(`/editar/${item.id}`)">Editar </a-button>
+                    </a-space>
+                </template>
+                <p>{{ item.name }}</p>
+            </a-card>
+
+         </a-space>
+        <!-- <ul  v-if="databaseStore.loadingDoc">
             <li v-for="item of databaseStore.documents" :key="item.id">
                 {{ item.id }} 
                 <br>
@@ -40,6 +74,6 @@ const handleSubmit=()=> {
                 <button @click="router.push(`/editar/${item.id}`)">EDITAR</button>
             </li>
 
-        </ul>
+        </ul> -->
     </div>
 </template>
