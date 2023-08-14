@@ -24,10 +24,11 @@ const handleSubmit=()=> {
         <h1>Home </h1>
         <p>{{ useStore.userData?.email }}</p>
         
-        <form @submit.prevent="handleSubmit">
+        <add-form></add-form>
+        <!-- <form @submit.prevent="handleSubmit">
             <input type="text" placeholder="Ingrese URL" v-model="url">
             <button type="submit">Agregar</button>
-        </form>
+        </form> -->
         <p v-if="databaseStore.loadingDoc">loading docs...</p>
         <ul>
             <li v-for="item of databaseStore.documents" :key="item.id">

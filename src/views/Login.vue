@@ -3,10 +3,11 @@
 import { reactive } from 'vue';
 import {useUserStore} from '../stores/user';
 // import {useRouter} from 'vue-router';
+import { message } from 'ant-design-vue';
 
     const formState=reactive({
-        email:'leguigol@hotmail.com',
-        password: 'lancelot1014'
+        email:'',
+        password: ''
     }) 
     const userStore=useUserStore();
     // const email=ref('');
@@ -24,7 +25,21 @@ import {useUserStore} from '../stores/user';
 
     const onFinish=async(values) => {
         console.log("Success: ",values);
-        await userStore.loginUser(formState.email,formState.password);
+        const error=await userStore.loginUser(formState.email,formState.password);
+        if(!error){
+            return message.success('Bienvenidos !!');
+        }
+        switch(error){
+            case 'auth/user-not-found':
+                message.error('no existe esa cuenta');
+                break;
+            case 'auth/wrong-password':
+                message.error('error de contraseña');
+                break;
+            default: 
+                message.error('fallo algo desde firebase');     
+        }
+
     }    
 
 </script>
@@ -52,6 +67,7 @@ import {useUserStore} from '../stores/user';
                         type="primary"
                         html-type="submit"
                         :disabled="userStore.loadingUser"
+                        :loading="userStore.loadingUser"
                     >ACCEDER
                     </a-button>
                 </a-form-item>
