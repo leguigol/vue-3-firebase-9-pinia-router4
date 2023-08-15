@@ -55,7 +55,7 @@ const cancel = () => {
                             @confirm="confirm(item.id)"
                             @cancel="cancel"
                         >
-                        <a-button danger @click="databaseStore.deleteUrl(item.id)">Eliminar</a-button>
+                        <a-button danger>Eliminar</a-button>
                     </a-popconfirm>    
                         <a-button type="primary"  @click="router.push(`/editar/${item.id}`)">Editar </a-button>
                     </a-space>
